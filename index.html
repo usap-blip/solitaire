@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0d2818">
+  <meta name="description" content="美しいダークテーマのクロンダイク・ソリティアゲーム。ブラウザで遊べる本格カードゲーム。">
+  <title>ソリティア - Klondike</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+
+    <header id="game-header">
+      <div id="header-left">
+        <h1 id="game-title">♠ ソリティア</h1>
+      </div>
+      <div id="header-center">
+        <div class="stat-badge" id="timer-badge">
+          <span class="stat-icon">⏱</span>
+          <span id="timer">00:00</span>
+        </div>
+        <div class="stat-badge" id="moves-badge">
+          <span class="stat-icon">↕</span>
+          <span id="moves">0手</span>
+        </div>
+      </div>
+      <div id="header-right">
+        <button id="undo-btn" class="header-btn" title="元に戻す（Ctrl+Z）">
+          <span class="btn-icon">↩</span>
+          <span class="btn-label">戻す</span>
+        </button>
+        <button id="new-game-btn" class="header-btn header-btn--primary" title="新しいゲーム">
+          <span class="btn-icon">✦</span>
+          <span class="btn-label">新規</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="game-board">
+      <div id="top-row">
+        <div id="stock" class="pile" role="button" aria-label="山札"></div>
+        <div id="waste" class="pile" aria-label="捨て札"></div>
+        <div class="top-row-spacer"></div>
+        <div id="foundation-0" class="pile foundation" aria-label="組札 スペード"></div>
+        <div id="foundation-1" class="pile foundation" aria-label="組札 ハート"></div>
+        <div id="foundation-2" class="pile foundation" aria-label="組札 ダイヤ"></div>
+        <div id="foundation-3" class="pile foundation" aria-label="組札 クラブ"></div>
+      </div>
+      <div id="tableau">
+        <div id="tableau-0" class="pile tableau-pile"></div>
+        <div id="tableau-1" class="pile tableau-pile"></div>
+        <div id="tableau-2" class="pile tableau-pile"></div>
+        <div id="tableau-3" class="pile tableau-pile"></div>
+        <div id="tableau-4" class="pile tableau-pile"></div>
+        <div id="tableau-5" class="pile tableau-pile"></div>
+        <div id="tableau-6" class="pile tableau-pile"></div>
+      </div>
+    </main>
+
+    <div id="victory-overlay" class="hidden">
+      <canvas id="confetti-canvas"></canvas>
+      <div id="victory-content">
+        <div id="victory-icon">🏆</div>
+        <h2 id="victory-title">クリア！</h2>
+        <p id="victory-stats"></p>
+        <button id="play-again-btn" class="header-btn header-btn--primary header-btn--large">
+          <span class="btn-icon">✦</span>
+          <span class="btn-label">もう一度プレイ</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>

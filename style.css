@@ -1,0 +1,581 @@
+/* ============================================================
+   ソリティア - スタイルシート
+   ============================================================ */
+
+/* --- CSS Custom Properties --- */
+:root {
+  /* カードサイズ（デスクトップ） */
+  --card-w: 90px;
+  --card-h: 130px;
+  --card-radius: 10px;
+  --card-gap: 12px;
+  --board-pad: 20px;
+
+  /* 色 */
+  --felt-1: #18492b;
+  --felt-2: #0d2818;
+  --felt-3: #091e12;
+  --gold: #d4a843;
+  --gold-glow: rgba(212, 168, 67, 0.35);
+  --card-bg: #faf6ee;
+  --card-back-1: #1e3a5f;
+  --card-back-2: #162d4a;
+  --card-back-pattern: rgba(255,255,255,0.06);
+  --card-red: #d63031;
+  --card-black: #1e272e;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  --card-shadow-hover: 0 6px 20px rgba(0,0,0,0.5);
+  --card-shadow-drag: 0 12px 36px rgba(0,0,0,0.55);
+  --glass-bg: rgba(255,255,255,0.07);
+  --glass-border: rgba(255,255,255,0.12);
+  --glass-bg-hover: rgba(255,255,255,0.13);
+  --text: #e8e0d4;
+  --text-dim: rgba(232,224,212,0.5);
+
+  /* タブロー重なり（デスクトップ） */
+  --face-down-offset: 14px;
+  --face-up-offset: 28px;
+
+  /* アニメーション */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 0.18s var(--ease-out-expo);
+  --transition-normal: 0.3s var(--ease-out-expo);
+}
+
+/* --- リセット＆ベース --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--felt-3);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* --- ゲームコンテナ --- */
+#game-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* フェルト風背景 */
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(34,120,60,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at 80% 110%, rgba(34,120,60,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 10% 90%, rgba(20,80,45,0.15) 0%, transparent 50%),
+    linear-gradient(175deg, var(--felt-1) 0%, var(--felt-2) 45%, var(--felt-3) 100%);
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* --- ヘッダー --- */
+#game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--board-pad);
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+#header-left {
+  flex: 0 0 auto;
+}
+
+#game-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--gold), #f0d878);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 0.02em;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+#header-center {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.stat-icon {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+#header-right {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.header-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  background: var(--glass-bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.header-btn:hover {
+  background: var(--glass-bg-hover);
+  border-color: rgba(255,255,255,0.22);
+}
+
+.header-btn:active {
+  transform: scale(0.95);
+}
+
+.header-btn--primary {
+  background: linear-gradient(135deg, rgba(212,168,67,0.2), rgba(212,168,67,0.08));
+  border-color: rgba(212,168,67,0.3);
+  color: var(--gold);
+}
+
+.header-btn--primary:hover {
+  background: linear-gradient(135deg, rgba(212,168,67,0.3), rgba(212,168,67,0.15));
+  border-color: rgba(212,168,67,0.5);
+}
+
+.header-btn--large {
+  padding: 12px 28px;
+  font-size: 1rem;
+  border-radius: 28px;
+}
+
+.btn-icon {
+  font-size: 1em;
+}
+
+/* --- ゲームボード --- */
+#game-board {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--board-pad) var(--board-pad);
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* --- トップ行（山札・捨て札・組札） --- */
+#top-row {
+  display: flex;
+  gap: var(--card-gap);
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.top-row-spacer {
+  flex: 1 1 auto;
+  min-width: 10px;
+}
+
+/* --- パイル共通 --- */
+.pile {
+  width: var(--card-w);
+  min-height: var(--card-h);
+  border-radius: var(--card-radius);
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* --- パイルプレースホルダー --- */
+.pile-placeholder {
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  border: 2px dashed rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.1);
+}
+
+.foundation-placeholder {
+  font-size: 2rem;
+  color: rgba(255,255,255,0.12);
+  border-color: rgba(212,168,67,0.15);
+}
+
+.pile-refresh {
+  font-size: 2.2rem;
+  color: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.pile-refresh:hover {
+  color: rgba(255,255,255,0.4);
+  transform: rotate(-45deg);
+}
+
+.pile-count {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: rgba(0,0,0,0.6);
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* --- タブロー --- */
+#tableau {
+  display: flex;
+  gap: var(--card-gap);
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 20px;
+}
+
+#tableau::-webkit-scrollbar {
+  display: none;
+}
+
+.tableau-pile {
+  position: relative;
+  flex: 0 0 var(--card-w);
+}
+
+/* --- カード共通 --- */
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  position: relative;
+  box-shadow: var(--card-shadow);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* --- カード裏面 --- */
+.card--face-down {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--card-back-pattern) 0px,
+      var(--card-back-pattern) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      var(--card-back-pattern) 0px,
+      var(--card-back-pattern) 1px,
+      transparent 1px,
+      transparent 6px
+    ),
+    linear-gradient(160deg, var(--card-back-1), var(--card-back-2));
+  border: 1.5px solid rgba(255,255,255,0.08);
+  cursor: default;
+}
+
+.card--face-down::after {
+  content: '♠';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: rgba(255,255,255,0.07);
+}
+
+/* 山札のface-downカードにはカーソルを設定 */
+#stock .card--face-down {
+  cursor: pointer;
+}
+
+/* --- カード表面 --- */
+.card--face-up {
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.card--face-up::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.card--face-up:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-2px);
+  z-index: 100 !important;
+}
+
+.card--selected {
+  box-shadow: 0 0 0 3px var(--gold), var(--card-shadow-hover) !important;
+  transform: translateY(-4px);
+  z-index: 100 !important;
+}
+
+.card--red .card-corner,
+.card--red .card-center {
+  color: var(--card-red);
+}
+
+.card--black .card-corner,
+.card--black .card-center {
+  color: var(--card-black);
+}
+
+/* --- カード角（ランク＋スート） --- */
+.card-corner {
+  position: absolute;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.card-corner--top {
+  top: 5px;
+  left: 6px;
+}
+
+.card-corner--bottom {
+  bottom: 5px;
+  right: 6px;
+  transform: rotate(180deg);
+}
+
+.card-corner .suit {
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 1px;
+}
+
+/* --- カード中央 --- */
+.card-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.2rem;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* --- ドラッグゴースト --- */
+.drag-ghost {
+  pointer-events: none !important;
+  z-index: 10000 !important;
+  opacity: 0.92;
+}
+
+.drag-ghost .card {
+  box-shadow: var(--card-shadow-drag);
+}
+
+/* --- 勝利オーバーレイ --- */
+#victory-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadeIn 0.5s ease;
+}
+
+#victory-overlay.hidden {
+  display: none;
+}
+
+#confetti-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#victory-content {
+  text-align: center;
+  padding: 40px 50px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: scaleIn 0.5s var(--ease-out-expo);
+  z-index: 1;
+}
+
+#victory-icon {
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+  animation: bounce 1s ease infinite;
+}
+
+#victory-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--gold), #f0d878, var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+#victory-stats {
+  font-size: 1rem;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+/* --- アニメーション --- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes dealCard {
+  from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.card--dealing {
+  animation: dealCard 0.3s var(--ease-out-expo) both;
+}
+
+/* ============================================================
+   レスポンシブ
+   ============================================================ */
+
+/* タブレット */
+@media (max-width: 768px) {
+  :root {
+    --card-gap: 8px;
+    --board-pad: 12px;
+    --card-w: calc((100vw - 2 * var(--board-pad) - 6 * var(--card-gap) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) / 7);
+    --card-h: calc(var(--card-w) * 1.44);
+    --card-radius: 7px;
+  }
+
+  #game-title { font-size: 1.1rem; }
+  .stat-badge { padding: 4px 10px; font-size: 0.78rem; }
+  .header-btn { padding: 6px 10px; font-size: 0.78rem; }
+  .btn-label { display: none; }
+  .btn-icon { font-size: 1.15em; }
+  .card-corner { font-size: 0.7rem; }
+  .card-center { font-size: 1.6rem; }
+  #top-row { margin-bottom: 10px; }
+}
+
+/* スマートフォン */
+@media (max-width: 480px) {
+  :root {
+    --card-gap: 4px;
+    --board-pad: 6px;
+    --card-w: calc((100vw - 2 * var(--board-pad) - 6 * var(--card-gap) - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)) / 7);
+    --card-h: calc(var(--card-w) * 1.44);
+    --card-radius: 6px;
+    --face-down-offset: 10px;
+    --face-up-offset: 20px;
+  }
+
+  #game-header { padding: 6px var(--board-pad); }
+  #game-title { font-size: 0.95rem; }
+  .stat-badge { padding: 3px 8px; font-size: 0.72rem; gap: 3px; }
+  .stat-icon { font-size: 0.75rem; }
+  .header-btn { padding: 5px 8px; font-size: 0.72rem; border-radius: 16px; }
+  .btn-label { display: none; }
+  .card-corner { font-size: 0.58rem; top: 3px; }
+  .card-corner--top { left: 4px; }
+  .card-corner--bottom { right: 4px; bottom: 3px; }
+  .card-center { font-size: 1.3rem; }
+  .card--face-down::after { font-size: 1.2rem; }
+  .pile-placeholder { font-size: 1.1rem; border-width: 1.5px; }
+  .foundation-placeholder { font-size: 1.3rem; }
+  .pile-refresh { font-size: 1.5rem; }
+  .pile-count { font-size: 0.55rem; padding: 1px 4px; bottom: -2px; right: -2px; }
+  #top-row { margin-bottom: 8px; }
+  #game-board { padding-bottom: 10px; }
+  #victory-content { padding: 30px 28px; }
+  #victory-icon { font-size: 2.5rem; }
+  #victory-title { font-size: 1.6rem; }
+  #victory-stats { font-size: 0.85rem; }
+}
+
+/* 横向き + 小さい高さ */
+@media (max-height: 500px) and (orientation: landscape) {
+  #game-header { padding: 4px var(--board-pad); }
+  #game-title { font-size: 0.9rem; }
+  .stat-badge { padding: 2px 8px; }
+  #top-row { margin-bottom: 6px; }
+}
